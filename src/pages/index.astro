@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import Timeline from "../components/Timeline.astro";
 import Contact from "../components/Contact.astro";
+import TerminalWindow from "../components/TerminalWindow.astro";
 import { projects, filterSkills } from "../data/projects";
 import { certifications } from "../data/certifications";
 import { Image } from "astro:assets";
@@ -28,8 +29,10 @@ const stackGroups = [
        this person ships real agentic systems. Name dominates; a live
        process line declares availability the way a daemon reports up. -->
   <section class="pt-16 pb-14 md:pt-20 md:pb-16 border-b border-[var(--rule-faint)]">
-    <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-10 md:gap-12">
-      <div class="flex flex-col gap-7 md:max-w-xl">
+    <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-10 md:gap-16">
+      <div class="w-full md:max-w-2xl">
+        <TerminalWindow title="santiago_tovar — zsh">
+          <div class="flex flex-col gap-7">
         <!-- Live process line -->
         <div class="inline-flex items-center gap-2.5 self-start rounded-full border border-[var(--live-wash)] bg-[var(--live-wash)] pl-2 pr-3 py-1">
           <span class="relative flex h-2 w-2">
@@ -88,6 +91,8 @@ const stackGroups = [
             GitHub
           </a>
         </div>
+          </div>
+        </TerminalWindow>
       </div>
 
       <!-- Portrait: inset console frame — a subtle bracket, not a floating photo -->
@@ -100,7 +105,7 @@ const stackGroups = [
             height={512}
             quality={95}
             loading="eager"
-            class="w-44 h-56 md:w-52 md:h-64 object-cover rounded-[var(--r-lg)]"
+            class="w-52 h-64 md:w-64 md:h-80 object-cover rounded-[var(--r-lg)]"
             style="object-position: 50% 33%; transform: scale(1.25); transform-origin: center 33%;"
           />
         </div>
