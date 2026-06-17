@@ -222,3 +222,64 @@
     letter-spacing: -0.01em;
   }
 }
+
+/* === Motion for the closing sections === the timeline (git log) reveal and
+   the contact cursor. Deceleration easing, no bounce, per the design system.
+   CSS owns the animation so the reduced-motion fallback lives in one place;
+   the timeline script only toggles `.is-in` on the section. */
+@keyframes blink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: blink 1.15s steps(1) infinite;
+}
+
+/* Timeline rows start hidden and slide up in a staggered cascade. The stagger
+   index (--tl-i) is set per row in the markup; the rail draws first (120ms
+   head start), then each commit follows 70ms behind the last. */
+.tl-row {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(120ms + var(--tl-i, 0) * 70ms);
+}
+
+#timeline.is-in .tl-row {
+  opacity: 1;
+  transform: none;
+}
+
+.tl-rail {
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#timeline.is-in .tl-rail {
+  transform: scaleY(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blink {
+    animation: none;
+  }
+  .tl-row {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tl-rail {
+    transform: scaleY(1);
+    transition: none;
+  }
+}

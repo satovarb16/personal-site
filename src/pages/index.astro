@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
+import Timeline from "../components/Timeline.astro";
+import Contact from "../components/Contact.astro";
 import { projects, filterSkills } from "../data/projects";
 import { certifications } from "../data/certifications";
 import { Image } from "astro:assets";
@@ -177,18 +179,9 @@ const stackGroups = [
     </div>
   </section>
 
-  <!-- ============================ BLOG TEASER ============================ -->
-  <section class="py-16">
-    <div class="flex items-center justify-between mb-6">
-      <p class="prompt-label">blog --tail</p>
-      <a href="/blog" class="font-mono text-xs text-[var(--print-dim)] hover:text-[var(--signal-bright)] transition-colors">
-        view all →
-      </a>
-    </div>
-    <p class="text-sm text-[var(--print-default)] max-w-lg leading-relaxed">
-      Thoughts on what I'm building day to day, what I'm studying, and where I'm heading in my career.
-    </p>
-  </section>
+  <!-- ============================ TIMELINE + CONTACT ============================ -->
+  <Timeline />
+  <Contact />
 </Layout>
 
 <script>

@@ -1,0 +1,82 @@
+---
+const email = "satovarb@gmail.com";
+const linkedin = "https://www.linkedin.com/in/santiagotovarbrousset";
+const github = "https://github.com/satovarb16";
+---
+
+<!-- ============================ CONTACT / CTA ============================
+     The closing prompt. A terminal-window panel that bookends the hero's
+     live status line — same green LED, a blinking block cursor, and the
+     email offered as a runnable shell command. -->
+<section id="contact" class="py-20">
+  <p class="prompt-label mb-7">contact --send</p>
+
+  <div class="relative overflow-hidden rounded-[var(--r-xl)] border border-[var(--rule)] bg-[var(--console-panel)] px-7 py-9 md:px-12 md:py-12">
+    <!-- ambient purple bleed, top-right -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full"
+      style="background: radial-gradient(circle, var(--signal-glow), transparent 70%);"
+    >
+    </div>
+
+    <div class="relative flex flex-col gap-6 md:max-w-2xl">
+      <!-- availability echo — bookends the hero status line -->
+      <div class="inline-flex items-center gap-2 self-start font-mono text-[11px] text-[var(--live)] tracking-tight">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--live)] opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-[var(--live)]"></span>
+        </span>
+        status: open to AI engineering roles
+      </div>
+
+      <h2 class="text-3xl md:text-[2.6rem] font-bold text-[var(--print-bright)] leading-[1.1] tracking-tight">
+        Let's build something real.<span
+          class="cursor-blink ml-1.5 font-normal text-[var(--signal-bright)]"
+          aria-hidden="true">▌</span
+        >
+      </h2>
+
+      <p class="text-[15px] text-[var(--print-default)] leading-[1.8] md:max-w-xl">
+        I'm looking for AI engineering roles and collaborations on agentic systems.
+        If you're building something that lets models do real work, I want to hear about it.
+      </p>
+
+      <!-- email rendered as a runnable shell command -->
+      <a
+        href={`mailto:${email}`}
+        class="group inline-flex w-fit items-center gap-2 rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--console-inset)] px-3.5 py-2 font-mono text-[13px] tracking-tight transition-colors hover:border-[var(--rule-bright)]"
+      >
+        <span class="select-none text-[var(--signal-bright)]">$</span>
+        <span class="select-none text-[var(--print-dim)]">mail</span>
+        <span class="text-[var(--print-bright)] transition-colors group-hover:text-[var(--signal-bright)]">{email}</span>
+      </a>
+
+      <!-- actions — same vocabulary as the hero -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1">
+        <a
+          href={`mailto:${email}`}
+          class="inline-flex items-center gap-2 rounded-[var(--r-md)] bg-[var(--signal)] px-4 py-2 text-sm font-semibold text-[var(--console-ink)] transition-colors hover:bg-[var(--signal-bright)]"
+        >
+          Get in touch
+        </a>
+        <a
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-[var(--r-md)] border border-[var(--rule)] px-4 py-2 text-sm text-[var(--print-default)] transition-colors hover:border-[var(--rule-bright)] hover:text-[var(--print-bright)]"
+        >
+          LinkedIn
+        </a>
+        <a
+          href={github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-[var(--r-md)] border border-[var(--rule)] px-4 py-2 text-sm text-[var(--print-default)] transition-colors hover:border-[var(--rule-bright)] hover:text-[var(--print-bright)]"
+        >
+          GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

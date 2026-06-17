@@ -1,0 +1,102 @@
+---
+import { timeline } from "../data/timeline";
+---
+
+<!-- ============================ TIMELINE ============================
+     Career history rendered as a `git log --graph`: a vertical rail with
+     commit nodes. HEAD is the current work, marked with the same live LED
+     as the hero. The rail draws in and commits cascade on scroll. -->
+<section id="timeline" class="py-16 border-b border-[var(--rule-faint)]">
+  <div class="flex items-center justify-between mb-8">
+    <p class="prompt-label">
+      git log
+      <span class="text-[var(--print-faint)]">--graph</span>
+    </p>
+    <span class="font-mono text-[10px] text-[var(--print-faint)] tracking-tight">
+      {timeline.length} commits
+    </span>
+  </div>
+
+  <ol class="relative flex flex-col gap-9">
+    <!-- the git graph rail — draws downward when the section enters view -->
+    <span
+      aria-hidden="true"
+      class="tl-rail absolute left-[6px] top-2 bottom-2 w-px bg-[var(--rule-bright)]"
+    ></span>
+
+    {
+      timeline.map((entry, i) => (
+        <li class="tl-row relative pl-8" style={`--tl-i:${i}`}>
+          {/* commit node sitting on the rail; the ring lets the rail pass behind it */}
+          <span
+            class="absolute left-0 top-[5px] flex h-[13px] w-[13px] items-center justify-center"
+            aria-hidden="true"
+          >
+            {entry.current && (
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--live)] opacity-60" />
+            )}
+            <span
+              class={`relative inline-flex h-[9px] w-[9px] rounded-full ring-2 ring-[var(--console-ink)] ${
+                entry.current ? "bg-[var(--live)]" : "bg-[var(--signal)]"
+              }`}
+            />
+          </span>
+
+          {/* metadata line: hash · ref · kind · date */}
+          <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 mb-1.5 font-mono text-[10px] tracking-tight">
+            <span class="text-[var(--print-faint)]">{entry.hash}</span>
+            {entry.ref && (
+              <span class="rounded-[var(--r-sm)] border border-[rgba(80,250,123,0.35)] bg-[var(--live-wash)] px-1.5 py-0.5 text-[var(--live)]">
+                {entry.ref}
+              </span>
+            )}
+            <span class="uppercase tracking-widest text-[var(--signal-alt)] opacity-80">
+              {entry.kind}
+            </span>
+            <span class="text-[var(--print-dim)]">{entry.date}</span>
+          </div>
+
+          <h3 class="text-[15px] font-semibold text-[var(--print-bright)] leading-snug">
+            {entry.title}
+          </h3>
+          {entry.description && (
+            <p class="mt-1.5 text-[13px] text-[var(--print-default)] leading-relaxed md:max-w-xl">
+              {entry.description}
+            </p>
+          )}
+          {entry.details && (
+            <ul class="mt-1.5 flex flex-col gap-0.5 text-[13px] text-[var(--print-default)] leading-relaxed">
+              {entry.details.map((line) => (
+                <li>{line}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<script>
+  // Reveal the rail + cascade the commits once the section scrolls into view.
+  // CSS owns the motion (and the reduced-motion fallback); JS only flips state.
+  const section = document.getElementById("timeline");
+  if (section) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      section.classList.add("is-in");
+    } else {
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              section.classList.add("is-in");
+              obs.disconnect();
+            }
+          }
+        },
+        { threshold: 0.15 },
+      );
+      observer.observe(section);
+    }
+  }
+</script>
