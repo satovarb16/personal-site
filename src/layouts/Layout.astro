@@ -13,10 +13,13 @@ const currentPath = Astro.url.pathname;
 const onHome = currentPath === "/";
 const onBlog = currentPath.startsWith("/blog");
 
+// `active` here is only the initial (server-rendered) state. On the home page
+// the active indicator is taken over by a client-side scroll-spy (see the
+// script at the end of <body>) because in-page anchor clicks don't re-render.
 const navLinks = [
-  { href: "/#projects", label: "projects", active: onHome },
-  { href: "/#certifications", label: "certs", active: false },
-  { href: "/blog", label: "blog", active: onBlog },
+  { href: "/#projects", label: "projects", section: "projects", active: onHome },
+  { href: "/#certifications", label: "certs", section: "certifications", active: false },
+  { href: "/blog", label: "blog", section: "blog", active: onBlog },
 ];
 ---
 
@@ -48,6 +51,7 @@ const navLinks = [
             navLinks.map((link) => (
               <a
                 href={link.href}
+                data-nav={link.section}
                 class={`px-2.5 py-1 rounded-[var(--r-sm)] tracking-tight transition-colors ${
                   link.active
                     ? "text-[var(--signal-bright)] bg-[var(--signal-wash)]"
@@ -80,5 +84,58 @@ const navLinks = [
         </span>
       </div>
     </footer>
+
+    <script>
+      // Active-section indicator for the in-page nav. Runs only on pages that
+      // actually contain the sections (the home page). Anchor clicks scroll but
+      // don't re-render, so the active state must be managed client-side.
+      const ACTIVE = ["text-[var(--signal-bright)]", "bg-[var(--signal-wash)]"];
+      const IDLE = [
+        "text-[var(--print-dim)]",
+        "hover:text-[var(--print-default)]",
+        "hover:bg-[var(--rule-faint)]",
+      ];
+
+      const items = new Map<string, HTMLAnchorElement>();
+      document
+        .querySelectorAll<HTMLAnchorElement>("nav a[data-nav]")
+        .forEach((a) => a.dataset.nav && items.set(a.dataset.nav, a));
+
+      // Only the in-page sections present on this page take part in scroll-spy.
+      const spySections = ["projects", "certifications"].filter((id) =>
+        document.getElementById(id),
+      );
+
+      if (spySections.length) {
+        const setActive = (section: string) => {
+          for (const id of spySections) {
+            const link = items.get(id);
+            if (!link) continue;
+            const on = id === section;
+            link.classList.remove(...(on ? IDLE : ACTIVE));
+            link.classList.add(...(on ? ACTIVE : IDLE));
+          }
+        };
+
+        // Instant feedback on click — don't wait for the scroll to settle.
+        for (const id of spySections) {
+          items.get(id)?.addEventListener("click", () => setActive(id));
+        }
+
+        // Keep it in sync while the user scrolls manually.
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) setActive(entry.target.id);
+            }
+          },
+          { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
+        );
+        for (const id of spySections) {
+          const el = document.getElementById(id);
+          if (el) observer.observe(el);
+        }
+      }
+    </script>
   </body>
 </html>
