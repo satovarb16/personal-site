@@ -11,15 +11,16 @@ const { title, description = "Santiago Tovar — AI Engineer & Full-Stack Develo
 
 const currentPath = Astro.url.pathname;
 const onHome = currentPath === "/";
-const onBlog = currentPath.startsWith("/blog");
 
 // `active` here is only the initial (server-rendered) state. On the home page
 // the active indicator is taken over by a client-side scroll-spy (see the
 // script at the end of <body>) because in-page anchor clicks don't re-render.
+// Order mirrors the section order on the page.
 const navLinks = [
   { href: "/#projects", label: "projects", section: "projects", active: onHome },
   { href: "/#certifications", label: "certs", section: "certifications", active: false },
-  { href: "/blog", label: "blog", section: "blog", active: onBlog },
+  { href: "/#timeline", label: "timeline", section: "timeline", active: false },
+  { href: "/#contact", label: "contact", section: "contact", active: false },
 ];
 ---
 
@@ -39,20 +40,21 @@ const navLinks = [
         <!-- Brand as a shell prompt — the operator's handle -->
         <a
           href="/"
-          class="group flex items-center gap-2 font-mono text-[13px] tracking-tight text-[var(--print-bright)] transition-colors"
+          class="group flex shrink-0 items-center gap-2 font-mono text-[13px] tracking-tight text-[var(--print-bright)] transition-colors"
         >
           <span class="text-[var(--signal-bright)] opacity-80 group-hover:opacity-100 transition-opacity">~</span>
           <span>santiago_tovar</span>
         </a>
 
-        <!-- Nav links framed as terminal flags -->
-        <div class="flex items-center gap-0.5 font-mono text-[12px]">
+        <!-- Nav links framed as terminal flags. The row scrolls horizontally
+             (scrollbar hidden) so it never overflows the bar on small screens. -->
+        <div class="flex min-w-0 items-center gap-0.5 overflow-x-auto font-mono text-[12px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {
             navLinks.map((link) => (
               <a
                 href={link.href}
                 data-nav={link.section}
-                class={`px-2.5 py-1 rounded-[var(--r-sm)] tracking-tight transition-colors ${
+                class={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-[var(--r-sm)] tracking-tight transition-colors ${
                   link.active
                     ? "text-[var(--signal-bright)] bg-[var(--signal-wash)]"
                     : "text-[var(--print-dim)] hover:text-[var(--print-default)] hover:bg-[var(--rule-faint)]"
@@ -102,8 +104,8 @@ const navLinks = [
         .forEach((a) => a.dataset.nav && items.set(a.dataset.nav, a));
 
       // Only the in-page sections present on this page take part in scroll-spy.
-      const spySections = ["projects", "certifications"].filter((id) =>
-        document.getElementById(id),
+      const spySections = ["projects", "certifications", "timeline", "contact"].filter(
+        (id) => document.getElementById(id),
       );
 
       if (spySections.length) {
