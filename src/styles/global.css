@@ -270,9 +270,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cursor-blink {
-    animation: none;
-  }
+  /* The cursor blink is identity, not vestibular motion — a tiny ~1Hz opacity
+     change, well under flash thresholds. It stays on even under reduced-motion;
+     only the larger reveal/transform animations below are disabled. */
   .tl-row {
     opacity: 1;
     transform: none;

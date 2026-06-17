@@ -42,18 +42,26 @@ const stackGroups = [
         </div>
 
         <div class="flex flex-col gap-3">
-          <h1 class="text-[2.75rem] md:text-6xl font-bold text-[var(--print-bright)] leading-[1.04] tracking-tight">
-            Santiago Tovar
-          </h1>
+          <div class="flex flex-col gap-2">
+            <!-- Hero framed as a terminal session: the name is the output of `WhoAmI` -->
+            <p class="prompt-label">WhoAmI</p>
+            <h1 class="text-[2.75rem] md:text-6xl font-bold text-[var(--print-bright)] leading-[1.04] tracking-tight">
+              Santiago Tovar
+            </h1>
+          </div>
           <p class="text-sm font-medium text-[var(--signal-bright)] tracking-tight">
             AI Engineer<span class="text-[var(--print-faint)] mx-1.5">·</span>Full-Stack Developer
           </p>
         </div>
 
+        <!-- The blinking cursor trails the bio: the story is still being written. -->
         <p class="text-[15px] text-[var(--print-default)] leading-[1.8]">
           Computer Engineering grad (UF '26) who ships real AI systems. Built a production MCP server
           for job search automation and a live restaurant site using Claude Code and autonomous sub-agents.
-          Full-stack background in Python, React, and Flask.
+          Full-stack background in Python, React, and Flask.<span
+            class="cursor-blink ml-1 font-normal text-[var(--signal-bright)]"
+            aria-hidden="true">▌</span
+          >
         </p>
 
         <div class="flex flex-wrap items-center gap-2.5 pt-1">
