@@ -1,0 +1,35 @@
+---
+title: "Building runway: an MCP server for smarter job searching"
+description: "How I built a Python MCP server that gives Claude Code real-time H-1B sponsorship data and live job postings — and what I learned along the way."
+pubDate: 2026-06-01
+tags: ["MCP", "Python", "Claude Code", "AI Agents"]
+---
+
+Job searching as an international student is exhausting. You apply, you interview, and then you find out the company doesn't sponsor H-1B visas.
+
+So I built **runway** — a Python MCP server that gives Claude Code two things I needed: real-time H-1B sponsorship data from USCIS, and live job postings pulled directly from ATS platforms like Greenhouse, Ashby, and Lever.
+
+## The architecture
+
+The key design decision was the **tool-vs-reasoning boundary**.
+
+Tools fetch and shape data. Claude handles all evaluation logic. That separation means I can keep tools small, testable, and deterministic — while Claude does what it's actually good at: understanding context, weighing tradeoffs, and telling me whether a role is worth my time.
+
+## Two-tier parsing
+
+Not every company uses a clean ATS API. So I built:
+
+1. **Dedicated parsers** for Greenhouse, Ashby, and Lever — structured, fast, reliable.
+2. **Fallback layer** using JSON-LD, microdata, and Playwright for everything else.
+
+The fallback kicks in automatically when tier 1 fails. Most of the time you don't even notice.
+
+## Local USCIS caching
+
+USCIS data doesn't change that often, so hammering their endpoint on every query is wasteful. I added local caching with a configurable TTL. First query is slow, everything after is instant.
+
+## What I learned
+
+The hardest part wasn't the code — it was figuring out the right abstraction. I initially tried to make Claude do the parsing, which was slow and unreliable. Moving that logic into deterministic tools made everything faster and more predictable.
+
+MCP is genuinely powerful when you treat it as a data layer, not a logic layer.

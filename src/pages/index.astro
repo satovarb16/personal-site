@@ -1,0 +1,220 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { projects, filterSkills } from "../data/projects";
+import { certifications } from "../data/certifications";
+import { Image } from "astro:assets";
+import profilePhoto from "../assets/profile.jpg";
+
+// Stack grouped by intent — the machine layer reads as labeled rows of a
+// config, not an undifferentiated tag soup.
+const stackGroups = [
+  { label: "languages", items: ["Python", "JavaScript", "C++"] },
+  { label: "agentic", items: ["Claude Code", "AI Agents", "MCP", "Ollama"] },
+  { label: "web", items: ["React", "Flask", "REST APIs"] },
+  { label: "data", items: ["PostgreSQL", "Supabase"] },
+  { label: "ops", items: ["Git", "Linux", "CI/CD", "TDD", "SDD"] },
+];
+---
+
+<Layout title="Santiago Tovar — AI Engineer">
+  <!-- ============================ HERO ============================
+       The focal point. The one thing a recruiter must feel in 10s:
+       this person ships real agentic systems. Name dominates; a live
+       process line declares availability the way a daemon reports up. -->
+  <section class="pt-16 pb-14 md:pt-20 md:pb-16 border-b border-[var(--rule-faint)]">
+    <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-10 md:gap-12">
+      <div class="flex flex-col gap-7 md:max-w-xl">
+        <!-- Live process line -->
+        <div class="inline-flex items-center gap-2.5 self-start rounded-full border border-[var(--live-wash)] bg-[var(--live-wash)] pl-2 pr-3 py-1">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--live)]"></span>
+          </span>
+          <span class="font-mono text-[11px] text-[var(--live)] tracking-tight">
+            status: open to AI engineering roles
+          </span>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <h1 class="text-[2.75rem] md:text-6xl font-bold text-[var(--print-bright)] leading-[1.04] tracking-tight">
+            Santiago Tovar
+          </h1>
+          <p class="text-sm font-medium text-[var(--signal-bright)] tracking-tight">
+            AI Engineer<span class="text-[var(--print-faint)] mx-1.5">·</span>Full-Stack Developer
+          </p>
+        </div>
+
+        <p class="text-[15px] text-[var(--print-default)] leading-[1.8]">
+          Computer Engineering grad (UF '26) who ships real AI systems. Built a production MCP server
+          for job search automation and a live restaurant site using Claude Code and autonomous sub-agents.
+          Full-stack background in Python, React, and Flask.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+          <a
+            href="mailto:satovarb@gmail.com"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--r-md)] bg-[var(--signal)] text-[var(--console-ink)] text-sm font-semibold hover:bg-[var(--signal-bright)] transition-colors"
+          >
+            Get in touch
+          </a>
+          <a
+            href="https://www.linkedin.com/in/santiagotovarbrousset"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-[var(--r-md)] border border-[var(--rule)] text-sm text-[var(--print-default)] hover:text-[var(--print-bright)] hover:border-[var(--rule-bright)] transition-colors"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="https://github.com/satovarb16"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-[var(--r-md)] border border-[var(--rule)] text-sm text-[var(--print-default)] hover:text-[var(--print-bright)] hover:border-[var(--rule-bright)] transition-colors"
+          >
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Portrait: inset console frame — a subtle bracket, not a floating photo -->
+      <div class="shrink-0 self-center md:self-auto">
+        <div class="relative rounded-[var(--r-xl)] bg-[var(--console-inset)] p-1.5 border border-[var(--rule)]">
+          <Image
+            src={profilePhoto}
+            alt="Santiago Tovar"
+            width={416}
+            height={512}
+            quality={95}
+            loading="eager"
+            class="w-44 h-56 md:w-52 md:h-64 object-cover rounded-[var(--r-lg)]"
+            style="object-position: 50% 33%; transform: scale(1.25); transform-origin: center 33%;"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ STACK ============================
+       Labeled rows, like a printed config block. Each group is a key,
+       its tools are the value. -->
+  <section class="py-11 border-b border-[var(--rule-faint)]">
+    <p class="prompt-label mb-6">stack --list</p>
+    <dl class="flex flex-col gap-3">
+      {
+        stackGroups.map((group) => (
+          <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+            <dt class="font-mono text-[11px] text-[var(--signal-alt)] uppercase tracking-widest w-24 shrink-0 pt-1 opacity-80">
+              {group.label}
+            </dt>
+            <dd class="flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <span class="px-2.5 py-1 rounded-[var(--r-sm)] text-xs border border-[var(--rule)] text-[var(--print-dim)] bg-[var(--console-inset)] font-mono tracking-tight">
+                  {item}
+                </span>
+              ))}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- ============================ PROJECTS ============================ -->
+  <section id="projects" class="py-16 border-b border-[var(--rule-faint)]">
+    <div class="flex items-center justify-between mb-7">
+      <p class="prompt-label">
+        projects
+        <span class="text-[var(--print-faint)]">--count</span>
+        <span class="text-[var(--signal-bright)] ml-1">{projects.length}</span>
+      </p>
+    </div>
+
+    <!-- Filter: pills framed as active query state -->
+    <div class="flex flex-wrap gap-2 mb-7" id="filter-bar">
+      <button
+        class="filter-btn px-3 py-1 rounded-[var(--r-sm)] text-xs font-mono tracking-tight border border-[var(--rule-accent)] text-[var(--signal-bright)] bg-[var(--signal-wash)] transition-colors"
+        data-filter="all"
+      >
+        all
+      </button>
+      {
+        filterSkills.map((skill) => (
+          <button
+            class="filter-btn px-3 py-1 rounded-[var(--r-sm)] text-xs font-mono tracking-tight border border-[var(--rule)] text-[var(--print-dim)] hover:border-[var(--rule-bright)] hover:text-[var(--print-default)] bg-[var(--console-inset)] transition-colors"
+            data-filter={skill}
+          >
+            {skill}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2" id="projects-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- ============================ CERTIFICATIONS ============================ -->
+  <section id="certifications" class="py-16 border-b border-[var(--rule-faint)]">
+    <div class="flex items-center justify-between mb-7">
+      <p class="prompt-label">
+        certifications
+        <span class="text-[var(--print-faint)]">--count</span>
+        <span class="text-[var(--signal-bright)] ml-1">{certifications.length}</span>
+      </p>
+    </div>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        certifications.map((cert) => (
+          <div class="rounded-[var(--r-lg)] border border-[var(--rule)] bg-[var(--console-panel)] p-5 flex flex-col gap-2 hover:border-[var(--rule-bright)] hover:bg-[var(--console-raised)] transition-colors">
+            <p class="font-mono text-[10px] text-[var(--signal-alt)] uppercase tracking-widest opacity-80">{cert.issuer}</p>
+            <p class="text-sm font-medium text-[var(--print-bright)] leading-snug">{cert.title}</p>
+            <p class="text-[11px] text-[var(--print-faint)] mt-auto font-mono">{cert.year}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ============================ BLOG TEASER ============================ -->
+  <section class="py-16">
+    <div class="flex items-center justify-between mb-6">
+      <p class="prompt-label">blog --tail</p>
+      <a href="/blog" class="font-mono text-xs text-[var(--print-dim)] hover:text-[var(--signal-bright)] transition-colors">
+        view all →
+      </a>
+    </div>
+    <p class="text-sm text-[var(--print-default)] max-w-lg leading-relaxed">
+      Thoughts on what I'm building day to day, what I'm studying, and where I'm heading in my career.
+    </p>
+  </section>
+</Layout>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  const cards = document.querySelectorAll<HTMLElement>("#projects-grid article");
+
+  const ACTIVE = ["border-[var(--rule-accent)]", "text-[var(--signal-bright)]", "bg-[var(--signal-wash)]"];
+  const IDLE = ["border-[var(--rule)]", "text-[var(--print-dim)]", "bg-[var(--console-inset)]"];
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter!;
+
+      filterBtns.forEach((b) => {
+        b.classList.remove(...ACTIVE);
+        b.classList.add(...IDLE);
+      });
+
+      btn.classList.remove(...IDLE);
+      btn.classList.add(...ACTIVE);
+
+      cards.forEach((card) => {
+        const skills = card.dataset.skills?.split(",") ?? [];
+        const visible = filter === "all" || skills.includes(filter);
+        card.style.display = visible ? "" : "none";
+      });
+    });
+  });
+</script>

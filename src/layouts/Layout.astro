@@ -1,0 +1,84 @@
+---
+import "../styles/global.css";
+import { Font } from "astro:assets";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Santiago Tovar — AI Engineer & Full-Stack Developer" } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const onHome = currentPath === "/";
+const onBlog = currentPath.startsWith("/blog");
+
+const navLinks = [
+  { href: "/#projects", label: "projects", active: onHome },
+  { href: "/#certifications", label: "certs", active: false },
+  { href: "/blog", label: "blog", active: onBlog },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Font cssVariable="--font-jetbrains-mono" preload />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen antialiased">
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--rule)] bg-[var(--console-ink)]/80 backdrop-blur-xl">
+      <div class="mx-auto max-w-5xl px-6 h-14 flex items-center justify-between">
+        <!-- Brand as a shell prompt — the operator's handle -->
+        <a
+          href="/"
+          class="group flex items-center gap-2 font-mono text-[13px] tracking-tight text-[var(--print-bright)] transition-colors"
+        >
+          <span class="text-[var(--signal-bright)] opacity-80 group-hover:opacity-100 transition-opacity">~</span>
+          <span>santiago_tovar</span>
+        </a>
+
+        <!-- Nav links framed as terminal flags -->
+        <div class="flex items-center gap-0.5 font-mono text-[12px]">
+          {
+            navLinks.map((link) => (
+              <a
+                href={link.href}
+                class={`px-2.5 py-1 rounded-[var(--r-sm)] tracking-tight transition-colors ${
+                  link.active
+                    ? "text-[var(--signal-bright)] bg-[var(--signal-wash)]"
+                    : "text-[var(--print-dim)] hover:text-[var(--print-default)] hover:bg-[var(--rule-faint)]"
+                }`}
+              >
+                <span class="text-[var(--print-faint)]">/</span>
+                {link.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </nav>
+
+    <main class="mx-auto max-w-5xl px-6 pt-14">
+      <slot />
+    </main>
+
+    <footer class="mt-28 border-t border-[var(--rule-faint)] py-8">
+      <div class="mx-auto max-w-5xl px-6 flex items-center justify-between font-mono text-[11px] text-[var(--print-faint)]">
+        <span>
+          <span class="text-[var(--signal-bright)] opacity-70">$</span>
+          <span class="ml-1.5">santiago_tovar</span>
+          <span class="text-[var(--print-faint)]"> © {new Date().getFullYear()}</span>
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="text-[var(--print-faint)]">built_with</span>
+          <span class="text-[var(--print-dim)]">astro</span>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

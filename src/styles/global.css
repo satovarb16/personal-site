@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* ===================================================================
+       Direction: a command-line operator's workspace, rendered in the
+       Dracula palette. ONE typeface — JetBrains Mono — everywhere; the
+       whole interface reads like a terminal someone actually works in.
+       Hierarchy comes from CAPS, weight, italic, size, tracking and the
+       Dracula text levels — never from a second font family.
+       Official Dracula palette (exact values, not approximated):
+         bg #282a36 · current-line #44475a · fg #f8f8f2 · comment #6272a4
+         cyan #8be9fd · green #50fa7b · orange #ffb86c · pink #ff79c6
+         purple #bd93f9 · red #ff5555 · yellow #f1fa8c
+       =================================================================== */
+
+    /* === Dracula primitives === the raw palette, named once. */
+    --dracula-bg: #282a36;
+    --dracula-current: #44475a;
+    --dracula-fg: #f8f8f2;
+    --dracula-comment: #6272a4;
+    --dracula-cyan: #8be9fd;
+    --dracula-green: #50fa7b;
+    --dracula-orange: #ffb86c;
+    --dracula-pink: #ff79c6;
+    --dracula-purple: #bd93f9;
+    --dracula-red: #ff5555;
+    --dracula-yellow: #f1fa8c;
+
+    /* === Surface elevation === built UP from Dracula's base toward
+       current-line, in whisper-quiet steps (~2-3% lightness each). The
+       base #282a36 is lighter than a typical near-black terminal, so the
+       elevation ladder is gentle — felt, not seen.
+         ink (L0)  → the canvas, the void behind the prompt
+         panel(L1) → cards, panels (same plane as ink)
+         raised(L2)→ hover / pulled-forward panels
+         popover(L3)→ dropdowns, floating surfaces
+         inset(L-1)→ recessed wells: code, inputs, tags (darker than base) */
+    --console-ink: #282a36;       /* L0 — Dracula base */
+    --console-panel: #2e303e;     /* L1 — base nudged toward current-line */
+    --console-raised: #353746;    /* L2 — one step further up */
+    --console-popover: #3c3e4f;   /* L3 — approaching #44475a */
+    --console-inset: #21232e;     /* L(-1) — recessed, darker than base */
+
+    /* === Foreground === printout hierarchy, anchored on Dracula.
+       Primary is Dracula fg; muted is Dracula comment (#6272a4). The two
+       middle levels are interpolated so all four read distinctly on base. */
+    --print-bright: #f8f8f2;      /* primary — Dracula fg, the active line */
+    --print-default: #c2c4d6;     /* secondary — body prose, fg dimmed */
+    --print-dim: #8b90b5;         /* tertiary — labels, supporting (comment lifted) */
+    --print-faint: #6272a4;       /* muted — Dracula comment: scrollback, metadata */
+
+    /* === Borders === rule weight, like box-drawing characters.
+       Derived from Dracula fg at low alpha so edges read against the
+       lighter #282a36 base; the accent edge is purple. */
+    --rule: rgba(248, 248, 242, 0.09);         /* default cell separation */
+    --rule-faint: rgba(248, 248, 242, 0.055);  /* section seams */
+    --rule-bright: rgba(248, 248, 242, 0.18);  /* hover / emphasis edge */
+    --rule-accent: rgba(189, 147, 249, 0.42);  /* selected / active region (purple) */
+
+    /* === Brand === Dracula purple. The operator's own tooling, the lead
+       accent across the whole site — actions, links, identity. */
+    --signal: #bd93f9;            /* the accent — Dracula purple */
+    --signal-bright: #cbabfb;     /* on-dark text, links, active labels (lifted) */
+    --signal-wash: rgba(189, 147, 249, 0.12);  /* selected-region fill */
+    --signal-glow: rgba(189, 147, 249, 0.06);   /* ambient bleed */
+
+    /* === Secondary accent === Dracula cyan, used sparingly and only with
+       intent (tag category text, hover tints). Purple still leads. */
+    --signal-alt: #8be9fd;        /* Dracula cyan — secondary, earns its place */
+
+    /* === Operational status === the running-process LED.
+       Dracula green, reserved exclusively for "live / open to roles". */
+    --live: #50fa7b;              /* Dracula green */
+    --live-wash: rgba(80, 250, 123, 0.12);
+
+    /* === Type === ONE family. JetBrains Mono is the single typeface for
+       the entire site; there is no sans body font. --font-jetbrains-mono
+       is emitted by Astro's font API (see astro.config.mjs) and resolves
+       to a self-hosted, preloaded face. */
+    --font-mono: var(--font-jetbrains-mono), "SF Mono", "Fira Code",
+      ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    --font-sans: var(--font-mono);  /* alias — same terminal font, no sans */
+
+    /* === Radius scale === sharp-leaning; a terminal is built from cells.
+       sm: tags/inputs · md: buttons · lg: cards · xl: feature panels */
+    --r-sm: 5px;
+    --r-md: 7px;
+    --r-lg: 10px;
+    --r-xl: 14px;
+
+    /* Spacing base: 4px — scale: 4 8 12 16 20 24 32 40 48 64 80 96 */
+
+    /* === Legacy aliases — kept only for any unmigrated reference === */
+    --bg-base: var(--console-ink);
+    --bg-surface: var(--console-panel);
+    --bg-elevated: var(--console-raised);
+    --bg-overlay: var(--console-popover);
+    --bg-inset: var(--console-inset);
+    --fg-primary: var(--print-bright);
+    --fg-secondary: var(--print-default);
+    --fg-tertiary: var(--print-dim);
+    --fg-muted: var(--print-faint);
+    --border-default: var(--rule);
+    --border-subtle: var(--rule-faint);
+    --border-strong: var(--rule-bright);
+    --border-accent: var(--rule-accent);
+    --brand: var(--signal);
+    --brand-light: var(--signal-bright);
+    --brand-dim: var(--signal-wash);
+    --brand-glow: var(--signal-glow);
+    --status-live: var(--live);
+    --status-live-dim: var(--live-wash);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--console-ink);
+    color: var(--print-bright);
+    font-family: var(--font-mono);
+    font-feature-settings: "cv05" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* === Terminal atmosphere === a static, whisper-quiet backdrop fixed
+     behind all content. Two layers, both barely-there:
+       1. a fine dot-grid — the terminal cell matrix (24px lattice)
+       2. a radial vignette — faint CRT corner darkening
+     No motion, no scanline animation. It sets mood; text sits above it
+     at full contrast. Lives on a fixed ::before so it never scrolls or
+     intercepts pointer events. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(
+        circle at center,
+        rgba(189, 147, 249, 0.05) 0.5px,
+        transparent 0.5px
+      ),
+      radial-gradient(
+        ellipse 120% 90% at 50% 38%,
+        transparent 55%,
+        rgba(0, 0, 0, 0.28) 100%
+      );
+    background-size: 24px 24px, 100% 100%;
+    background-position: center, center;
+  }
+
+  /* Everything is monospace now. Tabular, slashed-zero numerals across the
+     board so data reads like a real terminal printout — columns align,
+     0 ≠ O. */
+  body,
+  .font-mono,
+  code,
+  pre,
+  time {
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  /* Headings in mono. With a single family, hierarchy leans on WEIGHT and
+     SIZE, not a font swap. Tracking is near-neutral — the heavy negative
+     tracking that suited Inter looks cramped on a monospace face, where
+     glyphs are already evenly cellular. A hair tighter on the largest
+     sizes for presence; otherwise let the grid breathe. */
+  h1 {
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    letter-spacing: -0.005em;
+  }
+
+  /* Body prose in monospace tires the eye at small sizes with tight
+     leading. Give it room: comfortable line-height and a touch of letter
+     spacing relaxation so the bio and blog body stay easy to read. */
+  p {
+    letter-spacing: -0.005em;
+  }
+}
+
+@layer components {
+  /* The signature: a CLI-style section marker. A monospace prompt caret
+     ("~ $") in the accent, followed by the section name as a command.
+     This is the single element that could only belong to an agent
+     engineer's site — section headers framed as terminal invocations. */
+  .prompt-label {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--print-dim);
+  }
+  .prompt-label::before {
+    content: "~ $";
+    color: var(--signal-bright);
+    font-weight: 500;
+    opacity: 0.85;
+  }
+
+  /* Blog body is the one place a reader spends real time in monospace.
+     Loosen line-height beyond the default and keep paragraphs at a
+     comfortable measure so long-form mono prose doesn't fatigue. The
+     prose container already caps width; this just relaxes vertical
+     rhythm and inter-word spacing for the terminal font. */
+  .prose :where(p, li):not(:where([class~="not-prose"] *)) {
+    line-height: 1.85;
+    letter-spacing: -0.01em;
+  }
+  .prose :where(h2, h3):not(:where([class~="not-prose"] *)) {
+    letter-spacing: -0.01em;
+  }
+}

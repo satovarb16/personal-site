@@ -1,0 +1,66 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = post.data.pubDate.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<Layout title={`${post.data.title} — Santiago Tovar`} description={post.data.description}>
+  <article class="py-16 max-w-2xl">
+    <header class="mb-12">
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--print-dim)] hover:text-[var(--signal-bright)] transition-colors mb-8"
+      >
+        <span class="text-[var(--print-faint)]">cd</span> ../blog
+      </a>
+      <h1 class="text-[2rem] md:text-[2.5rem] font-bold text-[var(--print-bright)] mb-5 leading-[1.1]">{post.data.title}</h1>
+      <div class="flex flex-wrap items-center gap-3">
+        <time datetime={post.data.pubDate.toISOString()} class="font-mono text-[11px] text-[var(--print-faint)] tracking-tight">
+          {formattedDate}
+        </time>
+        {
+          post.data.tags.length > 0 && (
+            <div class="flex gap-1.5">
+              {post.data.tags.map((tag) => (
+                <span class="px-2 py-0.5 rounded-[var(--r-sm)] text-[11px] bg-[var(--console-inset)] border border-[var(--rule-faint)] text-[var(--print-faint)] font-mono tracking-tight">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <div
+      class="prose prose-invert max-w-none
+      [&_h2]:text-[var(--print-bright)] [&_h2]:font-semibold [&_h2]:tracking-tight
+      [&_h3]:text-[var(--print-bright)] [&_h3]:font-medium
+      [&_p]:text-[var(--print-default)] [&_p]:leading-relaxed
+      [&_a]:text-[var(--signal-bright)] [&_a]:no-underline [&_a]:hover:underline
+      [&_code]:text-[var(--signal-bright)] [&_code]:text-sm [&_code]:font-mono
+      [&_pre]:bg-[var(--console-inset)] [&_pre]:border [&_pre]:border-[var(--rule)] [&_pre]:rounded-[var(--r-lg)]
+      [&_strong]:text-[var(--print-bright)] [&_strong]:font-semibold
+      [&_li]:text-[var(--print-default)]
+      [&_blockquote]:border-l-2 [&_blockquote]:border-[var(--rule-accent)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--print-dim)]"
+    >
+      <Content />
+    </div>
+  </article>
+</Layout>
