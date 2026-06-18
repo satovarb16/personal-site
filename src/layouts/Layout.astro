@@ -17,7 +17,9 @@ const onHome = currentPath === "/";
 // script at the end of <body>) because in-page anchor clicks don't re-render.
 // Order mirrors the section order on the page.
 const navLinks = [
-  { href: "/#projects", label: "projects", section: "projects", active: onHome },
+  { href: "/#about", label: "about", section: "about", active: onHome },
+  { href: "/#skills", label: "skills", section: "skills", active: false },
+  { href: "/#projects", label: "projects", section: "projects", active: false },
   { href: "/#certifications", label: "certs", section: "certifications", active: false },
   { href: "/#timeline", label: "timeline", section: "timeline", active: false },
   { href: "/#contact", label: "contact", section: "contact", active: false },
@@ -35,7 +37,7 @@ const navLinks = [
     <title>{title}</title>
   </head>
   <body class="min-h-screen antialiased">
-    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--rule)] bg-[var(--console-ink)]/80 backdrop-blur-xl">
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--rule)] bg-[var(--console-inset)]/85 backdrop-blur-xl">
       <div class="mx-auto max-w-5xl px-6 h-14 flex items-center justify-between">
         <!-- Brand as a shell prompt — the operator's handle -->
         <a
@@ -104,7 +106,7 @@ const navLinks = [
         .forEach((a) => a.dataset.nav && items.set(a.dataset.nav, a));
 
       // Only the in-page sections present on this page take part in scroll-spy.
-      const spySections = ["projects", "certifications", "timeline", "contact"].filter(
+      const spySections = ["about", "skills", "projects", "certifications", "timeline", "contact"].filter(
         (id) => document.getElementById(id),
       );
 
@@ -124,14 +126,21 @@ const navLinks = [
           items.get(id)?.addEventListener("click", () => setActive(id));
         }
 
-        // Keep it in sync while the user scrolls manually.
+        // Scroll-spy: track which sections cross a thin line near the top of
+        // the viewport, then highlight the topmost one currently in view.
+        // Tracking the full visible set (not just "just entered") guarantees
+        // exactly one active link at all times — no stuck or double highlight.
+        const visible = new Set<string>();
         const observer = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
-              if (entry.isIntersecting) setActive(entry.target.id);
+              if (entry.isIntersecting) visible.add(entry.target.id);
+              else visible.delete(entry.target.id);
             }
+            const current = spySections.find((id) => visible.has(id));
+            if (current) setActive(current);
           },
-          { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
+          { rootMargin: "-20% 0px -75% 0px", threshold: 0 },
         );
         for (const id of spySections) {
           const el = document.getElementById(id);
