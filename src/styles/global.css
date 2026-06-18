@@ -68,6 +68,7 @@
     /* === Secondary accent === Dracula cyan, used sparingly and only with
        intent (tag category text, hover tints). Purple still leads. */
     --signal-alt: #8be9fd;        /* Dracula cyan — secondary, earns its place */
+    --signal-alt-bright: #b3f2fe; /* cyan lifted toward white — hover/active */
 
     /* === Operational status === the running-process LED.
        Dracula green, reserved exclusively for "live / open to roles". */
