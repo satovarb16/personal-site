@@ -28,7 +28,7 @@ const stackGroups = [
        The focal point. The one thing a recruiter must feel in 10s:
        this person ships real agentic systems. Name dominates; a live
        process line declares availability the way a daemon reports up. -->
-  <section class="pt-16 pb-14 md:pt-20 md:pb-16 border-b border-[var(--rule-faint)]">
+  <section id="about" class="pt-16 pb-14 md:pt-20 md:pb-16 border-b border-[var(--rule-faint)]">
     <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-10 md:gap-16">
       <div class="w-full md:max-w-2xl">
         <TerminalWindow title="santiago_tovar — zsh">
@@ -59,9 +59,10 @@ const stackGroups = [
 
         <!-- The blinking cursor trails the bio: the story is still being written. -->
         <p class="text-[15px] text-[var(--print-default)] leading-[1.8]">
-          Computer Engineering grad (UF '26) who ships real AI systems. Built a production MCP server
-          for job search automation and a live restaurant site using Claude Code and autonomous sub-agents.
-          Full-stack background in Python, React, and Flask.<span
+          Computer Engineering grad (UF '26) who ships real AI systems — directing Claude Code and
+          autonomous sub-agents with spec-driven (SDD) and test-driven (TDD) workflows, from spec to
+          production. Built a production MCP server for job-search automation and a live restaurant site,
+          both in active use. Full-stack foundation in Python, React, Flask, and databases.<span
             class="cursor-blink ml-1 font-normal text-[var(--signal-bright)]"
             aria-hidden="true">▌</span
           >
@@ -95,9 +96,10 @@ const stackGroups = [
         </TerminalWindow>
       </div>
 
-      <!-- Portrait: inset console frame — a subtle bracket, not a floating photo -->
+      <!-- Portrait framed as a second window — an image viewer that mirrors the
+           terminal chrome, so the two read as sibling windows on the desktop. -->
       <div class="shrink-0 self-center md:self-auto">
-        <div class="relative rounded-[var(--r-xl)] bg-[var(--console-inset)] p-1.5 border border-[var(--rule)]">
+        <TerminalWindow title="graduation.jpg" bodyClass="p-0 overflow-hidden">
           <Image
             src={profilePhoto}
             alt="Santiago Tovar"
@@ -105,10 +107,10 @@ const stackGroups = [
             height={512}
             quality={95}
             loading="eager"
-            class="w-52 h-64 md:w-64 md:h-80 object-cover rounded-[var(--r-lg)]"
+            class="block w-52 h-64 md:w-64 md:h-80 object-cover"
             style="object-position: 50% 33%; transform: scale(1.25); transform-origin: center 33%;"
           />
-        </div>
+        </TerminalWindow>
       </div>
     </div>
   </section>
@@ -116,13 +118,13 @@ const stackGroups = [
   <!-- ============================ STACK ============================
        Labeled rows, like a printed config block. Each group is a key,
        its tools are the value. -->
-  <section class="py-11 border-b border-[var(--rule-faint)]">
+  <section id="skills" class="py-11 border-b border-[var(--rule-faint)]">
     <p class="prompt-label mb-6">stack --list</p>
-    <dl class="flex flex-col gap-3">
+    <dl class="flex flex-col divide-y divide-[var(--rule-faint)]">
       {
         stackGroups.map((group) => (
-          <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-            <dt class="font-mono text-[11px] text-[var(--signal-alt)] uppercase tracking-widest w-24 shrink-0 pt-1 opacity-80">
+          <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 py-3 first:pt-0 last:pb-0">
+            <dt class="font-mono text-[14px] text-[var(--signal-alt)] uppercase tracking-widest w-28 shrink-0 pt-1 opacity-80">
               {group.label}
             </dt>
             <dd class="flex flex-wrap gap-2">
@@ -187,7 +189,7 @@ const stackGroups = [
         certifications.map((cert) => (
           <div class="rounded-[var(--r-lg)] border border-[var(--rule)] bg-[var(--console-panel)] p-5 flex flex-col gap-2 hover:border-[var(--rule-bright)] hover:bg-[var(--console-raised)] transition-colors">
             <p class="font-mono text-[10px] text-[var(--signal-alt)] uppercase tracking-widest opacity-80">{cert.issuer}</p>
-            <p class="text-sm font-medium text-[var(--print-bright)] leading-snug">{cert.title}</p>
+            <p class="text-[15px] font-medium text-[var(--print-bright)] leading-snug">{cert.title}</p>
             <p class="text-[11px] text-[var(--print-faint)] mt-auto font-mono">{cert.year}</p>
           </div>
         ))
@@ -202,10 +204,84 @@ const stackGroups = [
 
 <script>
   const filterBtns = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
-  const cards = document.querySelectorAll<HTMLElement>("#projects-grid article");
+  const cards = Array.from(document.querySelectorAll<HTMLElement>("#projects-grid article"));
 
   const ACTIVE = ["border-[var(--rule-accent)]", "text-[var(--signal-bright)]", "bg-[var(--signal-wash)]"];
   const IDLE = ["border-[var(--rule)]", "text-[var(--print-dim)]", "bg-[var(--console-inset)]"];
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+  const matches = (card: HTMLElement, filter: string) => {
+    const skills = card.dataset.skills?.split(",") ?? [];
+    return filter === "all" || skills.includes(filter);
+  };
+  const isVisible = (card: HTMLElement) => card.style.display !== "none";
+
+  function applyFilter(filter: string) {
+    // FIRST — snapshot where the currently-visible cards sit.
+    const firstRects = new Map<HTMLElement, DOMRect>();
+    cards.forEach((card) => {
+      if (isVisible(card)) firstRects.set(card, card.getBoundingClientRect());
+    });
+
+    const leaving = cards.filter((card) => isVisible(card) && !matches(card, filter));
+
+    // Reflow the survivors and reveal the newcomers once any exit fade is done.
+    const settle = () => {
+      cards.forEach((card) => (card.style.display = matches(card, filter) ? "" : "none"));
+
+      cards.forEach((card) => {
+        if (!matches(card, filter)) return;
+        const first = firstRects.get(card);
+        const last = card.getBoundingClientRect();
+        if (first) {
+          // Survivor — slide from its old slot to the new one (FLIP). The slide
+          // is real movement, so it is skipped under reduced motion.
+          if (reduceMotion) return;
+          const dx = first.left - last.left;
+          const dy = first.top - last.top;
+          if (dx || dy) {
+            card.animate(
+              [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: "translate(0, 0)" }],
+              { duration: 420, easing: EASE },
+            );
+          }
+        } else {
+          // Newcomer — fade in (plus a slight scale when motion is allowed).
+          card.animate(
+            reduceMotion
+              ? [{ opacity: 0 }, { opacity: 1 }]
+              : [
+                  { opacity: 0, transform: "scale(0.96)" },
+                  { opacity: 1, transform: "scale(1)" },
+                ],
+            { duration: 360, easing: EASE },
+          );
+        }
+      });
+    };
+
+    if (leaving.length) {
+      // Exit is an opacity fade — safe under reduced motion — with a touch of
+      // scale only when motion is allowed.
+      const exits = leaving.map(
+        (card) =>
+          card.animate(
+            reduceMotion
+              ? [{ opacity: 1 }, { opacity: 0 }]
+              : [
+                  { opacity: 1, transform: "scale(1)" },
+                  { opacity: 0, transform: "scale(0.96)" },
+                ],
+            { duration: 180, easing: "ease-in" },
+          ).finished,
+      );
+      Promise.allSettled(exits).then(settle);
+    } else {
+      settle();
+    }
+  }
 
   filterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -215,15 +291,10 @@ const stackGroups = [
         b.classList.remove(...ACTIVE);
         b.classList.add(...IDLE);
       });
-
       btn.classList.remove(...IDLE);
       btn.classList.add(...ACTIVE);
 
-      cards.forEach((card) => {
-        const skills = card.dataset.skills?.split(",") ?? [];
-        const visible = filter === "all" || skills.includes(filter);
-        card.style.display = visible ? "" : "none";
-      });
+      applyFilter(filter);
     });
   });
 </script>
