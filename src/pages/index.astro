@@ -29,90 +29,94 @@ const stackGroups = [
        this person ships real agentic systems. Name dominates; a live
        process line declares availability the way a daemon reports up. -->
   <section id="about" class="pt-16 pb-14 md:pt-20 md:pb-16 border-b border-[var(--rule-faint)]">
-    <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-10 md:gap-16">
-      <div class="w-full md:max-w-2xl">
-        <TerminalWindow title="santiago_tovar — zsh">
-          <div class="flex flex-col gap-7">
-        <!-- Live process line -->
-        <div class="inline-flex items-center gap-2.5 self-start rounded-full border border-[var(--live-wash)] bg-[var(--live-wash)] pl-2 pr-3 py-1">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--live)]"></span>
-          </span>
-          <span class="font-mono text-[11px] text-[var(--live)] tracking-tight">
-            status: open to AI engineering roles
-          </span>
+    <!-- The about is one terminal window laid out as an L: the name block sits
+         top-left beside the portrait (top-right), and the bio + actions run the
+         full width along the bottom — the foot of the L. -->
+    <TerminalWindow title="santiago_tovar — zsh">
+      <div class="grid grid-cols-1 gap-x-10 gap-y-8 md:grid-cols-[1fr_auto]">
+        <!-- Top-left: status, name, role — centered against the taller portrait -->
+        <div class="flex flex-col gap-6 md:col-start-1 md:row-start-1 md:self-center">
+          <!-- Live process line -->
+          <div class="inline-flex items-center gap-2.5 self-start rounded-full border border-[var(--live-wash)] bg-[var(--live-wash)] pl-2 pr-3 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--live)]"></span>
+            </span>
+            <span class="font-mono text-[11px] text-[var(--live)] tracking-tight">
+              status: open to AI engineering roles
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
+              <!-- Hero framed as a terminal session: the name is the output of `WhoAmI` -->
+              <p class="prompt-label">WhoAmI</p>
+              <h1 class="text-[2.75rem] md:text-6xl font-bold text-[var(--print-bright)] leading-[1.04] tracking-tight">
+                Santiago Tovar
+              </h1>
+            </div>
+            <p class="text-sm font-medium text-[var(--signal-bright)] tracking-tight">
+              AI Engineer<span class="text-[var(--print-faint)] mx-1.5">·</span>Full-Stack Developer
+            </p>
+          </div>
         </div>
 
-        <div class="flex flex-col gap-3">
-          <div class="flex flex-col gap-2">
-            <!-- Hero framed as a terminal session: the name is the output of `WhoAmI` -->
-            <p class="prompt-label">WhoAmI</p>
-            <h1 class="text-[2.75rem] md:text-6xl font-bold text-[var(--print-bright)] leading-[1.04] tracking-tight">
-              Santiago Tovar
-            </h1>
-          </div>
-          <p class="text-sm font-medium text-[var(--signal-bright)] tracking-tight">
-            AI Engineer<span class="text-[var(--print-faint)] mx-1.5">·</span>Full-Stack Developer
+        <!-- Top-right: the portrait as a nested image-viewer window -->
+        <div class="md:col-start-2 md:row-start-1 justify-self-center md:justify-self-end">
+          <TerminalWindow title="graduation.jpg" bodyClass="p-0 overflow-hidden">
+            <Image
+              src={profilePhoto}
+              alt="Santiago Tovar"
+              width={416}
+              height={512}
+              quality={95}
+              loading="eager"
+              class="block w-52 h-72 md:w-64 md:h-80 object-cover"
+              style="object-position: 50% 33%; transform: scale(1.25); transform-origin: center 33%;"
+            />
+          </TerminalWindow>
+        </div>
+
+        <!-- Foot of the L: bio + actions, spanning the full width -->
+        <div class="flex flex-col gap-7 md:col-span-2 md:row-start-2">
+          <!-- The blinking cursor trails the bio: the story is still being written. -->
+          <p class="text-[15px] text-[var(--print-default)] leading-[1.8]">
+            Computer Engineering grad (UF '26) who ships real AI systems — directing Claude Code and
+            autonomous sub-agents with spec-driven (SDD) and test-driven (TDD) workflows, from spec to
+            production. Built a production MCP server for job-search automation and a live restaurant site,
+            both in active use. Full-stack foundation in Python, React, Flask, and databases.<span
+              class="cursor-blink ml-1 font-normal text-[var(--signal-bright)]"
+              aria-hidden="true">▌</span
+            >
           </p>
-        </div>
 
-        <!-- The blinking cursor trails the bio: the story is still being written. -->
-        <p class="text-[15px] text-[var(--print-default)] leading-[1.8]">
-          Computer Engineering grad (UF '26) who ships real AI systems — directing Claude Code and
-          autonomous sub-agents with spec-driven (SDD) and test-driven (TDD) workflows, from spec to
-          production. Built a production MCP server for job-search automation and a live restaurant site,
-          both in active use. Full-stack foundation in Python, React, Flask, and databases.<span
-            class="cursor-blink ml-1 font-normal text-[var(--signal-bright)]"
-            aria-hidden="true">▌</span
-          >
-        </p>
-
-        <div class="flex flex-wrap items-center gap-2.5 pt-1">
-          <a
-            href="mailto:satovarb@gmail.com"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--r-md)] bg-[var(--signal)] text-[var(--console-ink)] text-sm font-semibold hover:bg-[var(--signal-bright)] transition-colors"
-          >
-            Get in touch
-          </a>
-          <a
-            href="https://www.linkedin.com/in/santiagotovarbrousset"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="px-4 py-2 rounded-[var(--r-md)] border border-[var(--rule)] text-sm text-[var(--print-default)] hover:text-[var(--print-bright)] hover:border-[var(--rule-bright)] transition-colors"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="https://github.com/satovarb16"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="px-4 py-2 rounded-[var(--r-md)] border border-[var(--rule)] text-sm text-[var(--print-default)] hover:text-[var(--print-bright)] hover:border-[var(--rule-bright)] transition-colors"
-          >
-            GitHub
-          </a>
-        </div>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <a
+              href="mailto:satovarb@gmail.com"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-[var(--r-md)] bg-[var(--signal)] text-[var(--console-ink)] text-sm font-semibold hover:bg-[var(--signal-bright)] transition-colors"
+            >
+              Get in touch
+            </a>
+            <a
+              href="https://www.linkedin.com/in/santiagotovarbrousset"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 rounded-[var(--r-md)] border border-[var(--rule)] text-sm text-[var(--print-default)] hover:text-[var(--print-bright)] hover:border-[var(--rule-bright)] transition-colors"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://github.com/satovarb16"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 rounded-[var(--r-md)] border border-[var(--rule)] text-sm text-[var(--print-default)] hover:text-[var(--print-bright)] hover:border-[var(--rule-bright)] transition-colors"
+            >
+              GitHub
+            </a>
           </div>
-        </TerminalWindow>
+        </div>
       </div>
-
-      <!-- Portrait framed as a second window — an image viewer that mirrors the
-           terminal chrome, so the two read as sibling windows on the desktop. -->
-      <div class="shrink-0 self-center md:self-auto">
-        <TerminalWindow title="graduation.jpg" bodyClass="p-0 overflow-hidden">
-          <Image
-            src={profilePhoto}
-            alt="Santiago Tovar"
-            width={416}
-            height={512}
-            quality={95}
-            loading="eager"
-            class="block w-52 h-64 md:w-64 md:h-80 object-cover"
-            style="object-position: 50% 33%; transform: scale(1.25); transform-origin: center 33%;"
-          />
-        </TerminalWindow>
-      </div>
-    </div>
+    </TerminalWindow>
   </section>
 
   <!-- ============================ STACK ============================
