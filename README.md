@@ -1,41 +1,46 @@
 # Santiago Tovar — Personal Site
 
-Personal portfolio and blog for Santiago Tovar (AI Engineer · Full-Stack Developer).
+Personal portfolio for Santiago Tovar (AI Engineer · Full-Stack Developer).
 Built with [Astro](https://astro.build), styled with Tailwind CSS, and written around a
-terminal/console aesthetic with a single typeface (JetBrains Mono).
+terminal/console aesthetic (Dracula palette, a single typeface — JetBrains Mono).
 
 ## Tech Stack
 
-- **[Astro 6](https://astro.build)** — static site framework, content collections for the blog
+- **[Astro 6](https://astro.build)** — static site framework
 - **[Tailwind CSS 4](https://tailwindcss.com)** — via the `@tailwindcss/vite` plugin
-- **[MDX](https://mdxjs.com)** — blog posts authored in Markdown with components
 - **Astro Fonts API** — self-hosted JetBrains Mono (Google provider, latin subset, 400–700)
 - **Node** `>=22.12.0`
 
 ## Sections
 
-- **Hero** — name, role, availability status, and contact links
-- **Stack** — grouped tech stack (languages, agentic, web, data, ops)
-- **Projects** — project cards with client-side filtering by skill
+A single-page site (`/`) with a sticky scroll-spy nav:
+
+- **About** — name, role, availability status, and bio, framed as a terminal window with a top-right portrait
+- **Skills** — grouped tech stack (languages, agentic, web, data, ops, spoken)
+- **Projects** — project cards with animated client-side filtering by skill
 - **Certifications** — issuer / title / year grid
-- **Blog** — MDX-powered posts under `/blog`
+- **Timeline** — career history rendered as a `git log --graph`
+- **Contact** — closing call-to-action
 
 ## Project Structure
 
 ```text
 /
-├── public/                 # static assets (favicons)
+├── public/                 # static assets (favicon.svg — ST monogram)
 ├── src/
 │   ├── assets/             # images processed by Astro (profile photo)
-│   ├── components/         # reusable .astro components (ProjectCard)
-│   ├── content/blog/       # blog posts (.mdx) — the content collection
-│   ├── content.config.ts   # blog collection schema
+│   ├── components/         # reusable .astro components
+│   │   ├── ProjectCard.astro
+│   │   ├── Timeline.astro
+│   │   ├── Contact.astro
+│   │   └── TerminalWindow.astro   # reusable faux terminal-window frame
 │   ├── data/               # site content as typed data
 │   │   ├── projects.ts     # project list + skill filters
-│   │   └── certifications.ts
-│   ├── layouts/            # Layout.astro (base) and BlogLayout.astro
-│   ├── pages/              # routes (index, blog/index, blog/[slug])
-│   └── styles/global.css   # global styles + design tokens
+│   │   ├── certifications.ts
+│   │   └── timeline.ts
+│   ├── layouts/Layout.astro       # base layout: nav + scroll-spy + footer
+│   ├── pages/index.astro          # the single page
+│   └── styles/global.css          # design tokens + animations
 ├── astro.config.mjs
 └── package.json
 ```
@@ -54,18 +59,20 @@ All commands are run from the project root:
 
 ## Editing Content
 
-Content lives as typed data and MDX — no CMS:
+Content lives as typed data — no CMS:
 
 - **Projects** → `src/data/projects.ts` (each entry feeds a card and the skill filter)
 - **Certifications** → `src/data/certifications.ts`
+- **Timeline** → `src/data/timeline.ts`
 - **Stack groups** → `stackGroups` array in `src/pages/index.astro`
-- **Blog posts** → add an `.mdx` file under `src/content/blog/` matching the schema in `src/content.config.ts`
+- **Design tokens** (colors, radii, type) → `:root` in `src/styles/global.css`
 
 ## Build & Deploy
 
 ```sh
-npm run build      # outputs static files to ./dist/
+npm run build      # outputs a fully static site to ./dist/
 ```
 
-The `dist/` directory is a fully static site and can be deployed to any static host
-(Cloudflare Pages, Netlify, Vercel, GitHub Pages, etc.).
+Deployed to **Cloudflare Pages** — it builds and publishes automatically on every push to `main`
+(build command `npm run build`, output directory `dist`). The `dist/` output is plain static files
+and can be hosted anywhere (Netlify, Vercel, GitHub Pages, etc.).
