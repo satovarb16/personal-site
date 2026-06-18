@@ -2,15 +2,12 @@
 import { defineConfig, fontProviders } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
-import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-
-  integrations: [mdx()],
 
   // Single typeface across the whole site: JetBrains Mono. Inter was
   // removed — there is no sans body font anymore. Italic is included so

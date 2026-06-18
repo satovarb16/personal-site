@@ -209,19 +209,6 @@
     font-weight: 500;
     opacity: 0.85;
   }
-
-  /* Blog body is the one place a reader spends real time in monospace.
-     Loosen line-height beyond the default and keep paragraphs at a
-     comfortable measure so long-form mono prose doesn't fatigue. The
-     prose container already caps width; this just relaxes vertical
-     rhythm and inter-word spacing for the terminal font. */
-  .prose :where(p, li):not(:where([class~="not-prose"] *)) {
-    line-height: 1.85;
-    letter-spacing: -0.01em;
-  }
-  .prose :where(h2, h3):not(:where([class~="not-prose"] *)) {
-    letter-spacing: -0.01em;
-  }
 }
 
 /* === Motion for the closing sections === the timeline (git log) reveal and
