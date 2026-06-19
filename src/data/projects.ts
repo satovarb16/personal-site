@@ -28,21 +28,6 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: "repo-pilot — AI Coding Agent",
-    description:
-      "AI-powered development assistant that takes natural-language instructions, analyzes a GitHub repo, proposes file changes, runs sandboxed tests, and opens PRs — with mandatory human approval at every critical step.",
-    role: "Full-Stack Engineer",
-    period: "May 2026 – Present",
-    skills: ["TypeScript", "Next.js", "Fastify", "Prisma", "PostgreSQL", "MCP", "Docker", "Ollama", "Turborepo"],
-    highlights: [
-      "Local LLM backend via Ollama (Qwen 2.5-Coder) — no cloud API dependency for inference.",
-      "Sandboxed Docker containers with network isolation for safe test execution before any commit.",
-      "Strict state machine workflow: plan → edits → tests → PR, with approval gates at every step.",
-      "Encrypted GitHub PAT storage, path traversal prevention, and full audit trail in PostgreSQL.",
-    ],
-    link: "https://github.com/satovarb16/repo-pilot",
-  },
-  {
     title: "Los Ches — Restaurant Landing Page",
     description:
       "Production site for a family restaurant, independently designed, developed, and shipped with no team or brief.",
@@ -57,6 +42,21 @@ export const projects: Project[] = [
     link: "https://websitelosches.pages.dev/",
     linkLabel: "Live",
     featured: true,
+  },
+  {
+    title: "repo-pilot — AI Coding Agent",
+    description:
+      "AI-powered development assistant that takes natural-language instructions, analyzes a GitHub repo, proposes file changes, runs sandboxed tests, and opens PRs — with mandatory human approval at every critical step.",
+    role: "Full-Stack Engineer",
+    period: "May 2026 – Present",
+    skills: ["TypeScript", "Next.js", "Fastify", "Prisma", "PostgreSQL", "MCP", "Docker", "Ollama", "Turborepo"],
+    highlights: [
+      "Local LLM backend via Ollama (Qwen 2.5-Coder) — no cloud API dependency for inference.",
+      "Sandboxed Docker containers with network isolation for safe test execution before any commit.",
+      "Strict state machine workflow: plan → edits → tests → PR, with approval gates at every step.",
+      "Encrypted GitHub PAT storage, path traversal prevention, and full audit trail in PostgreSQL.",
+    ],
+    link: "https://github.com/satovarb16/repo-pilot",
   },
   {
     title: "Smart Task Alarm System",
