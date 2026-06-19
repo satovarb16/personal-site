@@ -7,9 +7,26 @@ export interface Project {
   highlights: string[];
   link?: string;
   linkLabel?: string;
+  featured?: boolean;
 }
 
 export const projects: Project[] = [
+  {
+    title: "runway — Job Search MCP Server",
+    description:
+      "Python MCP server that helps international students (F-1/OPT) filter US job postings by technical fit AND H-1B sponsorship history in a single call — pulling live postings from major ATS platforms and checking real USCIS data. Built and actively used during my own job search.",
+    role: "MCP Server Engineer",
+    period: "May 2026 – Present",
+    skills: ["Python", "MCP", "Claude Code", "Playwright", "pytest", "REST APIs"],
+    highlights: [
+      "Single analyze_job call gathers the posting, visa verdict, and stored CV profile, then hands Claude a scoring rubric to recommend APPLY / CONSIDER / SKIP.",
+      "Two-tier parsing: dedicated parsers for Greenhouse, Ashby, and Lever; JSON-LD/microdata/Playwright fallback for everything else.",
+      "Local USCIS caching (~2MB dataset) auto-refreshed on startup — visa checks are instant on subsequent queries.",
+      "Published to PyPI and installable as a Claude Code plugin in two commands.",
+    ],
+    link: "https://github.com/satovarb16/runwayMCP",
+    featured: true,
+  },
   {
     title: "repo-pilot — AI Coding Agent",
     description:
@@ -39,20 +56,7 @@ export const projects: Project[] = [
     ],
     link: "https://websitelosches.pages.dev/",
     linkLabel: "Live",
-  },
-  {
-    title: "runway — Job Search MCP Server",
-    description:
-      "Python MCP server that lets Claude Code check H-1B sponsorship history via USCIS data and pull live job postings from major ATS platforms — built and actively used during my own job search.",
-    role: "MCP Server Engineer",
-    period: "May 2026 – Present",
-    skills: ["Python", "MCP", "Claude Code", "Playwright", "pytest", "REST APIs"],
-    highlights: [
-      "Two-tier parsing: dedicated parsers for Greenhouse, Ashby, and Lever; JSON-LD/microdata/Playwright fallback for everything else.",
-      "Local USCIS caching (~2MB dataset) downloaded on first use — visa checks are instant on subsequent queries.",
-      "Clean tool-vs-reasoning boundary: tools only fetch and shape data; Claude handles all fit and sponsorship evaluation.",
-    ],
-    link: "https://github.com/satovarb16/runwayMCP",
+    featured: true,
   },
   {
     title: "Smart Task Alarm System",
